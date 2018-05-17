@@ -1,4 +1,4 @@
-For run the aplication you need to create a config.txt with your api credentials without the "()"
+For run the aplication you need to create a config.txt with your twitter's api credentials without the "()"
 
 config.txt:
 Consumer Key (consumer_key_here)
