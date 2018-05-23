@@ -6,8 +6,14 @@ import time
 driver = webdriver.Chrome()
 
 query='lulalivre'
-dataInicial=date(2018,3,1)
-dataFinal=date(2018,5,1)
+diaInicial=1
+mesInicial=1
+anoInicial=2018
+diaFinal=1
+mesFinal=1
+anoFinal=2018
+dataInicial= str(anoInicial)+'-'+str(mesInicial)+'-'+str(diaInicial)
+dataFinal=str(anoFinal)+'-'+str(mesFinal)+'-'+str(diaFinal)
 print(str(dataInicial))
 driver.get("https://twitter.com/search?l=pt&q=%23" + query + "%20since%3A" + str(dataInicial) + "%20until%3A" + str(dataFinal) + "&src=typd&lang=pt")
 while True:
