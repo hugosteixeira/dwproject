@@ -1,22 +1,18 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
-from datetime import date, timedelta, datetime
+import datetime import date, timedelta, datetime
 import time
 driver = webdriver.Chrome()
 
 query='lulalivre'
-diaInicial=1
-mesInicial=1
-anoInicial=2018
-diaFinal=1
-mesFinal=1
-anoFinal=2018
-dataInicial= str(anoInicial)+'-'+str(mesInicial)+'-'+str(diaInicial)
-dataFinal=str(anoFinal)+'-'+str(mesFinal)+'-'+str(diaFinal)
+initialDate="1/05/2018"
+finalDate="1/06/2018"
+dataInicial= time.mktime(datetime.datetime.strptime(initialDate, "%d/%m/%Y").timetuple())
+dataInicial= time.mktime(datetime.datetime.strptime(finalDate, "%d/%m/%Y").timetuple())
 print(str(dataInicial))
-driver.get("https://twitter.com/search?l=pt&q=%23" + query + "%20since%3A" + str(dataInicial) + "%20until%3A" + str(dataFinal) + "&src=typd&lang=pt")
 while True:
+    driver.get("https://twitter.com/search?l=pt&q=%23" + query + "%20since%3A" + str(dataInicial) + "%20until%3A" + str(dataFinal) + "&src=typd&lang=pt")
     body = driver.find_element_by_tag_name('body')
     body.send_keys(Keys.END)
     time.sleep(3)
