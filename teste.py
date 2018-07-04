@@ -4,10 +4,27 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import os
 import MySQLdb
+import sys
+from traceback import print_tb, extract_tb, format_list
+from textblob import TextBlob
+
+
+def printError():
+    error = sys.exc_info()
+    type = error[0]#tipo do erro
+    print('\n'+'Type: \n'+str(type)+'\n')
+    value = error[1] # valor do erro
+    print('Value: \n'+str(error[1])+'\n')
+    tb=error[2]
+    print('Traceback:')
+    e_tb=extract_tb(tb)
+    f_l=format_list(e_tb)#traceback em forma de lista para futuro usos
+    print_tb(tb)
+
 conn = MySQLdb.connect(host= "localhost",
                   user="root",
                   passwd="root",
-                  db="mydb")
+                  db="mydb",charset="utf8", use_unicode = True)
 cursor = conn.cursor()
 arquivo = open('lulalivre.txt','r')
 lista=arquivo.read().split()
@@ -23,32 +40,49 @@ auth.set_access_token('89299395-PpehItyb3bnxSI3TEbve9Y8uDZKKOgaYiQinCCrvg', 'Rh8
 api = tweepy.API(auth)
 
 for x in lista1:
-    tweet = api.get_status(x)
-    hashtags=tweet.entities["hashtags"]
-    nomeUsuario = tweet.user.screen_name
-    location = tweet.user.location
-    followersUsuario = tweet.user.followers_count
-    totalTweetsUsuario = tweet.user.statuses_count
-    textoTweet = tweet.text
-    tweetDate = tweet.created_at
-    retweetCount = tweet.retweet_count
-    likes = tweet.favorite_count
-    idStr = x
     print(x)
-    cursor.execute("""INSERT INTO Usuario (Nome,Followers,TotalTweets) VALUES(%s,%s,%s)""",(nomeUsuario,followersUsuario,totalTweetsUsuario))
-    idUsuario = cursor.lastrowid
-    hashtagsId=[]
-    for y in hashtags:
-        stringName = y['text']
-        cursor.execute("""INSERT INTO HashTag (Texto) VALUES(%s)""",[stringName])
-        hashtagsId.append(cursor.lastrowid)
-    try:
-        cursor.execute("""INSERT INTO Tweet (Texto,Data,Retweets,Likes,Usuario_idUsuario,idTweetOrigem,Lugar) VALUES(%s,%s,%s,%s,%s,%s,%s)""",(textoTweet.encode("utf-8"),tweetDate,retweetCount,likes,idUsuario,idStr,location))
-        tweetIdBanco = cursor.lastrowid
-        for ids in hashtagsId:
-            print(tweetIdBanco)
-            print(ids)
-            cursor.execute("""INSERT INTO tweet_has_hashtag (tweet_idTweet,hashtag_idHashTag) VALUES(%s,%s)""",(tweetIdBanco,ids))
+    try:        
+        tweet = api.get_status(x)
+        hashtags=tweet.entities["hashtags"]
+        nomeUsuario = tweet.user.screen_name
+        location = tweet.user.location
+        followersUsuario = tweet.user.followers_count
+        totalTweetsUsuario = tweet.user.statuses_count
+        textoTweet = tweet.text
+        tweetDate = tweet.created_at
+        retweetCount = tweet.retweet_count
+        likes = tweet.favorite_count
+        idStr = x
+        traducao = TextBlob(str(textoTweet)).translate(to='en')
+        print(traducao)
+        sentimento = traducao.sentiment.polarity
+        sentimeto1 = ''
+        if sentimento < 0:
+            sentimento1= '5'
+        elif sentimento == 0.0:
+            sentimento1= '6'
+        else:
+            sentimento1='7'
+        cursor.execute("""INSERT INTO Usuario (Nome,Followers,TotalTweets) VALUES(%s,%s,%s)""",(nomeUsuario,followersUsuario,totalTweetsUsuario))
+        idUsuario = cursor.lastrowid
+        hashtagsId=[]
+        for y in hashtags:
+            try:
+                stringName = y['text']
+                cursor.execute("""INSERT INTO HashTag (Texto) VALUES(%s)""",[stringName])
+                hashtagsId.append(cursor.lastrowid)
+            except:
+                printError()
+        try:
+            cursor.execute("""INSERT INTO Tweet (Texto,Data,Retweets,Likes,Usuario_idUsuario,idTweetOrigem,Lugar) VALUES(%s,%s,%s,%s,%s,%s,%s)""",(textoTweet.encode("utf-8"),tweetDate,retweetCount,likes,idUsuario,idStr,location))
+            tweetIdBanco = cursor.lastrowid
+            cursor.execute("""INSERT INTO tweetcandidato (Tweet_idTweet,Candidato_idCandidato,Sentimento_idSentimento) VALUES(%s,%s,%s)""",(tweetIdBanco,'2',sentimento1))
+            for ids in hashtagsId:
+                print(tweetIdBanco)
+                print(ids)
+                cursor.execute("""INSERT INTO tweet_has_hashtag (tweet_idTweet,hashtag_idHashTag) VALUES(%s,%s)""",(tweetIdBanco,ids))
+        except:
+            printError()
+        conn.commit()
     except:
-        print('oi')
-    conn.commit()
+        printError()
