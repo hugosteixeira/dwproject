@@ -24,9 +24,13 @@ def printError():
 conn = MySQLdb.connect(host= "localhost",
                   user="root",
                   passwd="root",
-                  db="mydb",charset="utf8", use_unicode = True)
+                  db="mydb",charset="utf8mb4", use_unicode = True)
 cursor = conn.cursor()
-arquivo = open('lulalivre.txt','r')
+arquivo = open('Bolsomito.txt','r')
+idCandidato = '2'
+idNegativo = '1'
+idNeutro = '2'
+idPositivo = '3'
 lista=arquivo.read().split()
 lista1=[]
 for x in range (len(lista)):
@@ -34,21 +38,19 @@ for x in range (len(lista)):
         lista1.append(lista[x])
 
 
-cwd = os.getcwd()
 auth = tweepy.OAuthHandler('jkwDvQkT5Es6S24JiLq2FLxrb', 'ju5ogpsqo3cQLxtgTurMgq7cmWt8CN2H9lQ0F5wGGrmegcvAMp')
 auth.set_access_token('89299395-PpehItyb3bnxSI3TEbve9Y8uDZKKOgaYiQinCCrvg', 'Rh8FHQk0Vd66LCZJIf20DrFzFZfmBZqqPLaAN3hXCmT3n')
 api = tweepy.API(auth)
 
 for x in lista1:
-    print(x)
     try:        
-        tweet = api.get_status(x)
+        tweet = api.get_status(x,tweet_mode='extended')
         hashtags=tweet.entities["hashtags"]
         nomeUsuario = tweet.user.screen_name
         location = tweet.user.location
         followersUsuario = tweet.user.followers_count
         totalTweetsUsuario = tweet.user.statuses_count
-        textoTweet = tweet.text
+        textoTweet = tweet.full_text
         tweetDate = tweet.created_at
         retweetCount = tweet.retweet_count
         likes = tweet.favorite_count
@@ -56,13 +58,14 @@ for x in lista1:
         traducao = TextBlob(str(textoTweet)).translate(to='en')
         print(traducao)
         sentimento = traducao.sentiment.polarity
+        print(sentimento)
         sentimeto1 = ''
-        if sentimento < 0:
-            sentimento1= '5'
+        if sentimento < :
+            sentimento1= idNegativo
         elif sentimento == 0.0:
-            sentimento1= '6'
+            sentimento1= idNeutro
         else:
-            sentimento1='7'
+            sentimento1=idPositivo
         cursor.execute("""INSERT INTO Usuario (Nome,Followers,TotalTweets) VALUES(%s,%s,%s)""",(nomeUsuario,followersUsuario,totalTweetsUsuario))
         idUsuario = cursor.lastrowid
         hashtagsId=[]
@@ -76,10 +79,8 @@ for x in lista1:
         try:
             cursor.execute("""INSERT INTO Tweet (Texto,Data,Retweets,Likes,Usuario_idUsuario,idTweetOrigem,Lugar) VALUES(%s,%s,%s,%s,%s,%s,%s)""",(textoTweet.encode("utf-8"),tweetDate,retweetCount,likes,idUsuario,idStr,location))
             tweetIdBanco = cursor.lastrowid
-            cursor.execute("""INSERT INTO tweetcandidato (Tweet_idTweet,Candidato_idCandidato,Sentimento_idSentimento) VALUES(%s,%s,%s)""",(tweetIdBanco,'2',sentimento1))
+            cursor.execute("""INSERT INTO tweetcandidato (Tweet_idTweet,Candidato_idCandidato,Sentimento_idSentimento) VALUES(%s,%s,%s)""",(tweetIdBanco,idCandidato,sentimento1))
             for ids in hashtagsId:
-                print(tweetIdBanco)
-                print(ids)
                 cursor.execute("""INSERT INTO tweet_has_hashtag (tweet_idTweet,hashtag_idHashTag) VALUES(%s,%s)""",(tweetIdBanco,ids))
         except:
             printError()
