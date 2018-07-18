@@ -3,52 +3,49 @@ import pymysql.cursors
 import sys
 from utils import printError
 class DB_helper :
-    Q_CREAT_TABLE = '''
+    Q_CREAT_TABLES = [ 'DROP TABLE IF EXISTS `candidato`;',
 
-
-DROP TABLE IF EXISTS `candidato`;
-
-CREATE TABLE `candidato` (
+'''CREATE TABLE `candidato` (
   `idCandidato` int(11) NOT NULL AUTO_INCREMENT,
   `Nome` varchar(45) NOT NULL,
   `Partido` varchar(45) NOT NULL,
   `Numero` int(11) NOT NULL,
   PRIMARY KEY (`idCandidato`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;''',
 
 
-DROP TABLE IF EXISTS `hashtag`;
+'DROP TABLE IF EXISTS `hashtag`;',
 
-CREATE TABLE `hashtag` (
+'''CREATE TABLE `hashtag` (
   `idHashTag` int(11) NOT NULL AUTO_INCREMENT,
   `Texto` varchar(45) NOT NULL,
   PRIMARY KEY (`idHashTag`),
   UNIQUE KEY `Texto` (`Texto`)
-) ENGINE=InnoDB AUTO_INCREMENT=3238 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3238 DEFAULT CHARSET=utf8;''',
 
 
-DROP TABLE IF EXISTS `lugar`;
+'DROP TABLE IF EXISTS `lugar`;',
 
-CREATE TABLE `lugar` (
+'''CREATE TABLE `lugar` (
   `idLugar` int(11) NOT NULL AUTO_INCREMENT,
   `Estado` varchar(45) NOT NULL,
   `Pais` varchar(45) NOT NULL,
   PRIMARY KEY (`idLugar`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;''',
 
 
-DROP TABLE IF EXISTS `sentimento`;
+'DROP TABLE IF EXISTS `sentimento`;',
 
-CREATE TABLE `sentimento` (
+'''CREATE TABLE `sentimento` (
   `idSentimento` int(11) NOT NULL AUTO_INCREMENT,
   `Nome` varchar(45) NOT NULL,
   PRIMARY KEY (`idSentimento`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;''',
 
 
-DROP TABLE IF EXISTS `tweet`;
+'DROP TABLE IF EXISTS `tweet`;',
 
-CREATE TABLE `tweet` (
+'''CREATE TABLE `tweet` (
   `idTweet` int(11) NOT NULL AUTO_INCREMENT,
   `Texto` varchar(400) NOT NULL,
   `Data` varchar(45) NOT NULL,
@@ -64,12 +61,12 @@ CREATE TABLE `tweet` (
   KEY `fk_Tweet_Lugar1_idx` (`Lugar_idLugar`),
   CONSTRAINT `fk_Tweet_Lugar1` FOREIGN KEY (`Lugar_idLugar`) REFERENCES `lugar` (`idLugar`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_Tweet_Usuario1` FOREIGN KEY (`Usuario_idUsuario`) REFERENCES `usuario` (`idUsuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1660 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1660 DEFAULT CHARSET=utf8;''',
 
 
-DROP TABLE IF EXISTS `tweet_has_hashtag`;
+'''DROP TABLE IF EXISTS `tweet_has_hashtag`;''',
 
-CREATE TABLE `tweet_has_hashtag` (
+'''CREATE TABLE `tweet_has_hashtag` (
   `tweet_idTweet` int(11) NOT NULL,
   `hashtag_idHashTag` int(11) NOT NULL,
   PRIMARY KEY (`tweet_idTweet`,`hashtag_idHashTag`),
@@ -77,12 +74,12 @@ CREATE TABLE `tweet_has_hashtag` (
   KEY `fk_tweet_has_hashtag_tweet1_idx` (`tweet_idTweet`),
   CONSTRAINT `fk_tweet_has_hashtag_hashtag1` FOREIGN KEY (`hashtag_idHashTag`) REFERENCES `hashtag` (`idHashTag`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_tweet_has_hashtag_tweet1` FOREIGN KEY (`tweet_idTweet`) REFERENCES `tweet` (`idTweet`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;''',
 
 
-DROP TABLE IF EXISTS `tweetcandidato`;
+'DROP TABLE IF EXISTS `tweetcandidato`;',
 
-CREATE TABLE `tweetcandidato` (
+'''CREATE TABLE `tweetcandidato` (
   `Tweet_idTweet` int(11) NOT NULL,
   `Candidato_idCandidato` int(11) NOT NULL,
   `Sentimento_idSentimento` int(11) NOT NULL,
@@ -92,12 +89,12 @@ CREATE TABLE `tweetcandidato` (
   CONSTRAINT `fk_TweetCandidato_Candidato1` FOREIGN KEY (`Candidato_idCandidato`) REFERENCES `candidato` (`idCandidato`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_TweetCandidato_Sentimento1` FOREIGN KEY (`Sentimento_idSentimento`) REFERENCES `sentimento` (`idSentimento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_TweetCandidato_Tweet1` FOREIGN KEY (`Tweet_idTweet`) REFERENCES `tweet` (`idTweet`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;''',
 
 
-DROP TABLE IF EXISTS `usuario`;
+'DROP TABLE IF EXISTS `usuario`;',
 
-CREATE TABLE `usuario` (
+'''CREATE TABLE `usuario` (
   `idUsuario` int(11) NOT NULL AUTO_INCREMENT,
   `Nome` varchar(45) NOT NULL,
   `Followers` int(11) NOT NULL,
@@ -106,9 +103,9 @@ CREATE TABLE `usuario` (
   PRIMARY KEY (`idUsuario`),
   KEY `fk_Usuario_Lugar1_idx` (`Lugar_idLugar`),
   CONSTRAINT `fk_Usuario_Lugar1` FOREIGN KEY (`Lugar_idLugar`) REFERENCES `lugar` (`idLugar`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1723 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1723 DEFAULT CHARSET=utf8;'''
 
-'''
+]
     
     Q_CREATE_DATABASE = "CREATE DATABASE dw"
     Q_DROP_DATABASE = "DROP DATABASE dw"
@@ -148,7 +145,8 @@ CREATE TABLE `usuario` (
             cursor = self.getConn(database_name = '').cursor()
             cursor.execute(self.Q_CREATE_DATABASE)
             cursor = self.getConn().cursor()
-            cursor.execute(self.Q_CREAT_TABLE)
+            results =[(print(q),cursor.execute(q)) for q in self.Q_CREAT_TABLES]
+            
             return('"DATABASE {} CREATED"'.format(self.DATA_BASE_NAME))
 
     def DROP_DATA_BASE(self):
