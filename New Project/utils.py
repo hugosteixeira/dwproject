@@ -14,3 +14,12 @@ def printError():
     f_l=format_list(e_tb)#traceback em forma de lista para futuro usos
     print_tb(tb)
     return typeError, value, tb, f_l
+
+def tratarListaDao(lista):
+    resultado = '(' 
+    for x in lista:
+        if x == lista[-1]:
+            resultado = resultado + x + ')'
+        else:
+            resultado = resultado + x + ', '
+    return resultado

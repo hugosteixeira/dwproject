@@ -60,7 +60,7 @@ for x in lista1:
         sentimento = traducao.sentiment.polarity
         print(sentimento)
         sentimeto1 = ''
-        if sentimento < :
+        if sentimento < 0:
             sentimento1= idNegativo
         elif sentimento == 0.0:
             sentimento1= idNeutro
