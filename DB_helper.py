@@ -3,7 +3,7 @@ import pymysql.cursors
 import sys
 from utils import printError
 class DB_helper :
-    Q_CREAT_TABLES = [ 'DROP TABLE IF EXISTS `candidato`;',
+    Q_CREATE_TABLES = [ 'DROP TABLE IF EXISTS `candidato`;',
 
 '''CREATE TABLE `candidato` (
   `idCandidato` int(11) NOT NULL AUTO_INCREMENT,
@@ -41,6 +41,19 @@ class DB_helper :
   `Nome` varchar(45) NOT NULL,
   PRIMARY KEY (`idSentimento`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;''',
+
+'DROP TABLE IF EXISTS `usuario`;',
+
+'''CREATE TABLE `usuario` (
+  `idUsuario` int(11) NOT NULL AUTO_INCREMENT,
+  `Nome` varchar(45) NOT NULL,
+  `Followers` int(11) NOT NULL,
+  `TotalTweets` int(11) NOT NULL,
+  `Lugar_idLugar` int(11) DEFAULT NULL,
+  PRIMARY KEY (`idUsuario`),
+  KEY `fk_Usuario_Lugar1_idx` (`Lugar_idLugar`),
+  CONSTRAINT `fk_Usuario_Lugar1` FOREIGN KEY (`Lugar_idLugar`) REFERENCES `lugar` (`idLugar`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=1723 DEFAULT CHARSET=utf8;''',
 
 
 'DROP TABLE IF EXISTS `tweet`;',
@@ -89,21 +102,10 @@ class DB_helper :
   CONSTRAINT `fk_TweetCandidato_Candidato1` FOREIGN KEY (`Candidato_idCandidato`) REFERENCES `candidato` (`idCandidato`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_TweetCandidato_Sentimento1` FOREIGN KEY (`Sentimento_idSentimento`) REFERENCES `sentimento` (`idSentimento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_TweetCandidato_Tweet1` FOREIGN KEY (`Tweet_idTweet`) REFERENCES `tweet` (`idTweet`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;''',
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;'''
 
 
-'DROP TABLE IF EXISTS `usuario`;',
 
-'''CREATE TABLE `usuario` (
-  `idUsuario` int(11) NOT NULL AUTO_INCREMENT,
-  `Nome` varchar(45) NOT NULL,
-  `Followers` int(11) NOT NULL,
-  `TotalTweets` int(11) NOT NULL,
-  `Lugar_idLugar` int(11) DEFAULT NULL,
-  PRIMARY KEY (`idUsuario`),
-  KEY `fk_Usuario_Lugar1_idx` (`Lugar_idLugar`),
-  CONSTRAINT `fk_Usuario_Lugar1` FOREIGN KEY (`Lugar_idLugar`) REFERENCES `lugar` (`idLugar`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1723 DEFAULT CHARSET=utf8;'''
 
 ]
     
@@ -141,12 +143,18 @@ class DB_helper :
         try:
             conn = self.getConn()
         except :
-            
+
             cursor = self.getConn(database_name = '').cursor()
             cursor.execute(self.Q_CREATE_DATABASE)
             cursor = self.getConn().cursor()
-            results =[(print(q),cursor.execute(q)) for q in self.Q_CREAT_TABLES]
-            
+            if p_table:
+                for q in self.Q_CREATE_TABLES:
+                    print(q)
+                    cursor.execute(q)
+            else:
+                for q in self.Q_CREATE_TABLES:
+                    cursor.execute(q)
+
             return('"DATABASE {} CREATED"'.format(self.DATA_BASE_NAME))
 
     def DROP_DATA_BASE(self):
@@ -162,7 +170,4 @@ class DB_helper :
         rInit = self.INIT_DATA_BASE()
         return ('try drop result : {}, try creat result : {}'.format(rDrop, rInit))
             
-helper = DB_helper()
-result = helper.resetDB()
-print(result)
 
