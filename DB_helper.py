@@ -62,6 +62,7 @@ class DB_helper :
   `idTweet` int(11) NOT NULL AUTO_INCREMENT,
   `Texto` varchar(400) NOT NULL,
   `Data` varchar(45) NOT NULL,
+  `TimeStamp` int(11) DEFAULT NULL,
   `Replys` int(11) DEFAULT NULL,
   `Retweets` int(11) NOT NULL,
   `Likes` int(11) NOT NULL,
