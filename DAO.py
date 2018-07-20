@@ -12,7 +12,9 @@ class Dao:
         try:
             columns = tratarListaDao(columns)
             values = tratarListaDao(values)
-            self.cursor.execute('INSERT INTO %s(%s) VALUES %s',(table,columns,values))
+            valor="INSERT INTO {}({}) VALUES ('{}')".format(table,columns,values)
+            print(valor)
+            self.cursor.execute(valor)
             self.cursor.commit()
             self.cursor.close()
             return self.cursor.lastrowid
@@ -21,19 +23,21 @@ class Dao:
 
     def select(self,columns, table, whereArg=''):
         try:
-            whereArg = tratarListaDao(whereArg)
             if whereArg != '':
-                self.cursor.fetchall('SELECT %s FROM %s WHERE %s',(columns,table,whereArg))
+                selectWhere='SELECT {} FROM {} WHERE {};'.format(columns,table,whereArg)
+                print(selectWhere)
+                self.cursor.execute(selectWhere)
+                result = self.cursor.fetchall()
             else:
-                self.cursor.fetchall('SELECT %s FROM %s',(columns,table,))
-            self.cursor.commit()
-            return self.cursor.lastrowid
+                self.cursor.execute('SELECT {} FROM {};'.format(columns,table))
+                result = self.cursor.fetchall()
+            return result
         except:
             printError()
 
 
 
-    def insertTweet(self,tweet):
+    def insertTweet(self,tweet):    
         try:
             userId = self.insertUser(tweet.user)
             hashtagsIds = self.insertHashtags(tweet.hashtags)
@@ -50,19 +54,35 @@ class Dao:
             table = 'Usuario'
             columns = ['Nome','Followers','TotalTweets']
             values = [user.screen_name,user.followers_count,user.statuses_count]
-            userId = self.insert(table,columns,values)
-            return userId
+            selectWhere=self.select(columns,table,"Nome="+user.screen_name)
+            if selectWhere== ():
+                userId = self.insert(table,columns,values)
+                return userId
+            else:
+                userId=selectWhere[0]['idUsuario']
+                return userId
         except:
             printError()
 
     def insertHashtags(self,hashtags):
         try:
             table = 'Hashtag'
-            columns = ['Texto']
+            columns = 'Texto'
             hashtagIds = []
             for hashtag in hashtags:
-                values = [hashtag.text]
-                hashtagIds.append(self.insert(table,columns,values))
+                values = [hashtag['text']]
+                selectWhere=self.select(columns,table,"Texto = '"+values[0]+"'")
+                if selectWhere== ():
+                    hashtagIds.append(self.insert([table],[columns],values))
+                    return hashtagIds
+                else:
+                    hashtagsIds=hashtagIds=selectWhere[0]['idHashTag']
+                    return hashtagsIds
+                
+                
             return hashtagIds
         except:
             printError()
+
+
+teste=Dao().insertHashtags([{'text':'pqpqpqpqp'}])

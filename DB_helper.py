@@ -115,7 +115,7 @@ class DB_helper :
     DATA_BASE_NAME = "dw"
     SQL_HOST = "localhost"
     SQL_USER = "root"
-    SQL_PASSWD = "Arretterr@"
+    SQL_PASSWD = ""
     SQL_SHARSET = "utf8mb4"
     SQL_UNICODE = True
     def __init__ (self):

@@ -4,7 +4,7 @@ import subprocess
 class Linguakit:
     
     LANGUAGE_SCRIPT = "perl"
-    PATH_SCRIPT_ANALYZE = "C:\\Users\\joaov\\Desktop\\Linguakit-master\\Linguakit-master\\linguakit.perl"
+    PATH_SCRIPT_ANALYZE = "C:\Users\Aurinez\Desktop\Linguakit\\linguakit.perl"
 
     def __init__(self, language_text = 'pt', output_mode = '-s', off_shell = True):
         self._language_text = language_text
