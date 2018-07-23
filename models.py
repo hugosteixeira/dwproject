@@ -1,13 +1,14 @@
 class Tweet:
-    def __init__ (self,tweet):
-        self.id = tweet.id_str
-        self.user = User(tweet.user.screen_name,tweet.user.followers_count,tweet.user.statuses_count,tweet.user.location)
-        self.hashtags=tweet.entities["hashtags"]
-        self.tweetText = tweet.full_text
-        self.tweetDate = tweet.created_at
-        self.retweetCount = tweet.retweet_count
-        self.likes = tweet.favorite_count
+    def __init__ (self,status):
+        self.id = status.id_str
+        self.user = User(status.user.screen_name,status.user.followers_count,status.user.statuses_count,status.user.location)
+        self.hashtags = status.entities["hashtags"]
+        self.tweetText = status.full_text
+        self.tweetDate = status.created_at
+        self.retweetCount = status.retweet_count
+        self.likes = status.favorite_count
         self.sentimento = 1
+        self.candidato = ''
     
     def __str__(self):
         return self.tweetText

@@ -112,14 +112,14 @@ class DB_helper :
     
     Q_CREATE_DATABASE = "CREATE DATABASE dw"
     Q_DROP_DATABASE = "DROP DATABASE dw"
-    DATA_BASE_NAME = "dw"
+    DATA_BASE_NAME = "basemodel"
     SQL_HOST = "localhost"
     SQL_USER = "root"
     SQL_PASSWD = ""
     SQL_SHARSET = "utf8mb4"
     SQL_UNICODE = True
     def __init__ (self):
-
+        self.conn = ''
         self._cursorclass = pymysql.cursors.DictCursor
 
     def getConn(self, database_name = DATA_BASE_NAME):
@@ -136,8 +136,8 @@ class DB_helper :
 
     
     def getCursor(self):
-        conn = self.getConn()
-        cursor = conn.cursor()
+        self.conn = self.getConn()
+        cursor = self.conn.cursor()
         return cursor
 
     def INIT_DATA_BASE(self, p_table = False):
