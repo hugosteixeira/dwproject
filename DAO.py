@@ -14,6 +14,7 @@ class Dao:
             columns = tratarColumnsDao(columns)
             values = tratarValuesDao(values)
             valor="INSERT INTO {}({}) VALUES ('{}')".format(table,columns,values)
+            print(valor)
             self.cursor.execute(valor)
             self.dbHelper.conn.commit()
             return self.cursor.lastrowid
@@ -24,6 +25,7 @@ class Dao:
         try:
             if whereArg != '':
                 selectWhere='SELECT {} FROM {} WHERE {};'.format(columns,table,whereArg)
+                print(selectWhere)
                 self.cursor.execute(selectWhere)
                 result = self.cursor.fetchall()
                 
@@ -84,8 +86,34 @@ class Dao:
         except:
             printError()
 
-#dao = Dao()
-#tweetGetter = TweetFromID()
-#tweet = tweetGetter.getTweet('1021183317406896128')
-#teste = dao.insertTweet(tweet)
+    def insertTweetHashtag(self,idTweet,idHashtag):
+        try:
+            table = 'tweet_has_hashtag'
+            columns = ['tweet_idTweet', 'hashtag_idHashTag']
+            values = [idTweet,idHashtag]
+            selectWhere=self.select('*',table,"tweet_idTweet = '"+idTweet+"' AND hashtag_idHashTag = '"+idHashtag+"'")
+            if selectWhere == ():
+                result=self.insert(table,columns,values)
+            else:
+                result=0
+            return result
+        except:
+            printError()
+    
+    def insertTweetCandidato(self,idTweet,idCandidato,idSentimento):
+        try:
+            table = 'tweetcandidato'
+            columns = ['Tweet_idTweet','Candidato_idCandidato','Sentimento_idSentimento']
+            values = [idTweet,idCandidato,idSentimento]
+            selectWhere= self.select('*',table,"Tweet_idTweet = '"+idTweet+"'")
+            if selectWhere == ():
+                result=self.insert(table,columns,values)
+            else:
+                result = 'error'
+            return result
+        except:
+            printError
+
+
+
 
