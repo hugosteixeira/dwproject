@@ -14,19 +14,19 @@ class Dao:
             columns = tratarColumnsDao(columns)
             values = tratarValuesDao(values)
             valor="INSERT INTO {}({}) VALUES ('{}')".format(table,columns,values)
-            print(valor)
             self.cursor.execute(valor)
             self.dbHelper.conn.commit()
             return self.cursor.lastrowid
         except:
             printError()
 
-    def select(self,columns, table, whereArg=''):
+    def select(self, columns, table, whereArg=''):
         try:
             if whereArg != '':
                 selectWhere='SELECT {} FROM {} WHERE {};'.format(columns,table,whereArg)
                 self.cursor.execute(selectWhere)
                 result = self.cursor.fetchall()
+                
             else:
                 self.cursor.execute('SELECT {} FROM {};'.format(columns,table))
                 result = self.cursor.fetchall()
@@ -47,7 +47,7 @@ class Dao:
             if selectWhere == ():
                 tweetId = self.insert(table,columns,values)
             else:
-                tweetId = selectWhere[0]['idTweet']
+                tweetId = selectWhere[0]
             return tweetId
         except:
             printError()
@@ -62,7 +62,7 @@ class Dao:
             if selectWhere == ():
                 userId = self.insert(table,columns,values)
             else:
-                userId=selectWhere[0]['idUsuario']
+                userId=selectWhere[0]
             return userId
         except:
             printError()
@@ -78,14 +78,14 @@ class Dao:
                 if selectWhere== ():
                     hashtagIds.append(self.insert(table,[columns],values))
                 else:
-                    hashtagIds.append(selectWhere[0]['idHashTag'])
+                    hashtagIds.append(selectWhere[0])
                 
             return hashtagIds
         except:
             printError()
 
-dao = Dao()
-tweetGetter = TweetFromID()
-tweet = tweetGetter.getTweet('1021183317406896128')
-teste = dao.insertTweet(tweet)
+#dao = Dao()
+#tweetGetter = TweetFromID()
+#tweet = tweetGetter.getTweet('1021183317406896128')
+#teste = dao.insertTweet(tweet)
 

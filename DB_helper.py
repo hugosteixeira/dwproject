@@ -3,7 +3,18 @@ import pymysql.cursors
 import sys
 from utils import printError
 class DB_helper :
-    Q_CREATE_TABLES = [ 'DROP TABLE IF EXISTS `candidato`;',
+    Q_CREATE_TABLES = [ 'DROP TABLE IF EXISTS `manager`;',
+
+'''CREATE TABLE `manager` (
+  `idMining` int(11) NOT NULL AUTO_INCREMENT,
+  `hastag` varchar(45) NOT NULL,
+  `idTweet` varchar(45) NOT NULL,
+  `Candidato` varchar(45) NOT NULL,
+  `timeStamp` int(11) NOT NULL,
+  PRIMARY KEY (`idMining`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;''',
+
+'DROP TABLE IF EXISTS `candidato`;',
 
 '''CREATE TABLE `candidato` (
   `idCandidato` int(11) NOT NULL AUTO_INCREMENT,
@@ -170,5 +181,4 @@ class DB_helper :
         rDrop = self.DROP_DATA_BASE()
         rInit = self.INIT_DATA_BASE()
         return ('try drop result : {}, try creat result : {}'.format(rDrop, rInit))
-            
 
