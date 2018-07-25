@@ -48,6 +48,9 @@ class Dao:
             selectWhere=self.select('*',table,"idTweetOrigem = '"+tweet.id+"'")
             if selectWhere == ():
                 tweetId = self.insert(table,columns,values)
+                for x in hashtagsIds:
+                    self.insertTweetHashtag(tweetId,x)
+                self.insertTweetcandidate(tweetId,tweet.idCandidato,tweet.idSentimento)
             else:
                 tweetId = selectWhere[0]
             return tweetId
