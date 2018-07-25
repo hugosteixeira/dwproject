@@ -100,7 +100,7 @@ class Dao:
         except:
             printError()
     
-    def insertTweetCandidato(self,idTweet,idCandidato,idSentimento):
+    def insertTweetcandidate(self,idTweet,idCandidato,idSentimento):
         try:
             table = 'tweetcandidato'
             columns = ['Tweet_idTweet','Candidato_idCandidato','Sentimento_idSentimento']
@@ -114,6 +114,18 @@ class Dao:
         except:
             printError
 
-
+    def insertLocation(self,city,state,country):
+        try:
+            table = 'lugar'
+            columns = ['Cidade','Estado','Pais']
+            values = [city,state,country]
+            selectWhere = self.select('*',table,"Cidade = '"+city+"' AND Estado = '"+state+"'")
+            if selectWhere == ():
+                result=self.insert(table,columns,values)
+            else:
+                result = selectWhere[0]
+            return result
+        except:
+            printError()
 
 
