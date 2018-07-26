@@ -14,7 +14,7 @@ class Dao:
             columns = tratarColumnsDao(columns)
             values = tratarValuesDao(values)
             valor="INSERT INTO {}({}) VALUES ('{}')".format(table,columns,values)
-            #print(valor)
+            print(valor)
             self.cursor.execute(valor)
             self.dbHelper.conn.commit()
             return self.cursor.lastrowid
@@ -25,7 +25,7 @@ class Dao:
         try:
             if whereArg != '':
                 selectWhere='SELECT {} FROM {} WHERE {};'.format(columns,table,whereArg)
-                #print(selectWhere)
+                print(selectWhere)
                 self.cursor.execute(selectWhere)
                 result = self.cursor.fetchall()
                 
@@ -41,18 +41,20 @@ class Dao:
     def insertTweet(self,tweet):    
         try:
             userId = self.insertUser(tweet.user)
+            print(userId,'teste')
             hashtagsIds = self.insertHashtags(tweet.hashtags)
             table = 'Tweet'
             columns = ['Texto','Data','Retweets','Likes','Usuario_idUsuario','idTweetOrigem','Lugar_idLugar']
-            values = [tweet.tweetText,tweet.tweetDate,tweet.retweetCount,tweet.likes,userId,tweet.id,tweet.user.location]
             selectWhere=self.select('*',table,"idTweetOrigem = '"+tweet.id+"'")
             if selectWhere == ():
                 lugarId = self.insertLocation(tweet.user.location)
-                values = [tweet.tweetText,tweet.tweetDate,tweet.retweetCount,tweet.likes,userId,tweet.id,lugarId]
+                if lugarId == None:
+                   lugarId = 2
+                values = [tweet.tweetText,tweet.tweetDate,tweet.retweetCount,tweet.likes,userId,tweet.id,2]
                 tweetId = self.insert(table,columns,values)
                 for x in hashtagsIds:
                     self.insertTweetHashtag(tweetId,x)
-                self.insertTweetcandidate(tweetId,tweet.idCandidato,tweet.idSentimento)
+                self.insertTweetcandidate(tweetId,tweet.candidato,tweet.sentimento)
             else:
                 tweetId = selectWhere[0]
             return tweetId
@@ -69,7 +71,7 @@ class Dao:
             if selectWhere == ():
                 userId = self.insert(table,columns,values)
             else:
-                userId=selectWhere[0]
+                userId=selectWhere[0]['idUsuario']
             return userId
         except:
             printError()
@@ -85,8 +87,10 @@ class Dao:
                 if selectWhere== ():
                     hashtagIds.append(self.insert(table,[columns],values))
                 else:
-                    hashtagIds.append(selectWhere[0])
-                
+                    hashtagId = selectWhere[0]['idHashTag']
+                    print('teste hashtag',hashtagId)
+                    hashtagIds.append(hashtagId)
+               
             return hashtagIds
         except:
             printError()
@@ -96,7 +100,7 @@ class Dao:
             table = 'tweet_has_hashtag'
             columns = ['tweet_idTweet', 'hashtag_idHashTag']
             values = [idTweet,idHashtag]
-            selectWhere=self.select('*',table,"tweet_idTweet = '"+idTweet+"' AND hashtag_idHashTag = '"+idHashtag+"'")
+            selectWhere=self.select('*',table,"tweet_idTweet = '"+str(idTweet)+"' AND hashtag_idHashTag = '"+str(idHashtag)+"'")
             if selectWhere == ():
                 result=self.insert(table,columns,values)
             else:
@@ -110,7 +114,7 @@ class Dao:
             table = 'tweetcandidato'
             columns = ['Tweet_idTweet','Candidato_idCandidato','Sentimento_idSentimento']
             values = [idTweet,idCandidato,idSentimento]
-            selectWhere= self.select('*',table,"Tweet_idTweet = '"+idTweet+"'")
+            selectWhere= self.select('*',table,"Tweet_idTweet = '"+str(idTweet)+"'")
             if selectWhere == ():
                 result=self.insert(table,columns,values)
             else:
@@ -126,17 +130,19 @@ class Dao:
             city=location['city']
             state= location['state']
             country= location['country']
+            print(city)
             values = [city,state,country]
             selectWhere = self.select('*',table,"Cidade = '"+city+"' AND Estado = '"+state+"'")
             if selectWhere == ():
                 result=self.insert(table,columns,values)
             else:
-                result = selectWhere[0]
+                result = selectWhere[0]['idLugar']
             return result
         except:
             printError()
 
     def selectIds(self,lastid):
+
         rangeId = lastid + 2000
         try:
             table = 'manager'

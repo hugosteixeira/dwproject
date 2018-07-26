@@ -5,7 +5,7 @@ import time
 from tweet_from_id import TweetFromID
 from models import Tweet,User
 from sentiment_analyze import Linguakit
-from utils import printError
+from utils import printError, limparTexto
 
 s1 = sys.argv[1]
 
@@ -37,14 +37,16 @@ if s1 =='minetweet':
     for x in idList:
         idTweet = x['idTweet']
         if idTweet != '0':
-            print(x)
+            #print(x)
             try:
-                tweet = Tweet(tweetGetter.getTweet( x['idTweet']), idTweet)
+                tweet = tweetGetter.getTweet(idTweet)
+                tweet.tweetText = limparTexto(tweet.tweetText)
                 tweet.candidato = x['idCandidato']
-                tweet.sentimento = linguaKit.sent_analyze(tweet.tweetText)
-                if tweet.sentimento < 0:
+                tweet.sentimento = linguaKit.sent_analyze(tweet.tweetText)[2]
+                print(tweet.sentimento,'OLHA AQUI EU TOU AQUI')
+                if tweet.sentimento < 'NEGATIVE':
                     tweet.sentimento = 1
-                elif tweet.sentimento == 0:
+                elif tweet.sentimento == 'NONE':
                     tweet.sentimento = 2
                 else:
                     tweet.sentimento = 3
@@ -54,5 +56,5 @@ if s1 =='minetweet':
                 printError()
                 break
         fileOpen = open('Last_id.txt','w')
-        fileOpen.write(lastId)
+        fileOpen.write(str(lastId))
         fileOpen.close()

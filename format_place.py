@@ -4,6 +4,7 @@ from flask import request, jsonify
 from flask.views import MethodView
 from sqlalchemy import inspect
 import googlemaps
+from utils import printError
     
 
 class FormatPlace :
@@ -16,6 +17,7 @@ class FormatPlace :
 
     def localizationAddress(self):
         try:
+            print ("Minha localizacao e ", self.address_components)
             geocode_result = self.gmaps.geocode(self.address_components,language='pt-br',region='BR')
         
             address_components = {}
@@ -33,11 +35,20 @@ class FormatPlace :
                 address_components['city']= ''
                 address_components['state']=''
                 address_components['country']=geocode_result[0]['address_components'][0]['long_name']
-
+            else:
+                address_components['city']= ''
+                address_components['state']=''
+                address_components['country']=''
+            print('teste',address_components)
             return address_components
 
         except:
-            return None
+            address_components = {}
+            address_components['city']= ''
+            address_components['state']=''
+            address_components['country']=''
+            printError()
+            return address_components
 
 
 

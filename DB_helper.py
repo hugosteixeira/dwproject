@@ -12,7 +12,7 @@ class DB_helper :
   `idCandidato` varchar(45) NOT NULL,
   `timeStamp` int(11) NOT NULL,
   PRIMARY KEY (`idMining`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;''',
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;''',
 
 'DROP TABLE IF EXISTS `candidato`;',
 
@@ -22,7 +22,7 @@ class DB_helper :
   `Partido` varchar(45) NOT NULL,
   `Numero` int(11) NOT NULL,
   PRIMARY KEY (`idCandidato`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;''',''
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;''',''
 
 
 'DROP TABLE IF EXISTS `hashtag`;',
@@ -32,7 +32,7 @@ class DB_helper :
   `Texto` varchar(45) NOT NULL,
   PRIMARY KEY (`idHashTag`),
   UNIQUE KEY `Texto` (`Texto`)
-) ENGINE=InnoDB AUTO_INCREMENT=3238 DEFAULT CHARSET=utf8;''',
+) ENGINE=InnoDB AUTO_INCREMENT=3238 DEFAULT CHARSET=utf8mb4;''',
 
 
 'DROP TABLE IF EXISTS `lugar`;',
@@ -45,7 +45,7 @@ class DB_helper :
   PRIMARY KEY (`idLugar`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8;
+DEFAULT CHARACTER SET = utf8mb4;
 ''',
 
 
@@ -55,7 +55,7 @@ DEFAULT CHARACTER SET = utf8;
   `idSentimento` int(11) NOT NULL AUTO_INCREMENT,
   `Nome` varchar(45) NOT NULL,
   PRIMARY KEY (`idSentimento`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;''',
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;''',
 
 'DROP TABLE IF EXISTS `usuario`;',
 
@@ -64,11 +64,10 @@ DEFAULT CHARACTER SET = utf8;
   `Nome` varchar(45) NOT NULL,
   `Followers` int(11) NOT NULL,
   `TotalTweets` int(11) NOT NULL,
-  `Lugar_idLugar` int(11) DEFAULT NULL,
   PRIMARY KEY (`idUsuario`),
   KEY `fk_Usuario_Lugar1_idx` (`Lugar_idLugar`),
   CONSTRAINT `fk_Usuario_Lugar1` FOREIGN KEY (`Lugar_idLugar`) REFERENCES `lugar` (`idLugar`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1723 DEFAULT CHARSET=utf8;''',
+) ENGINE=InnoDB AUTO_INCREMENT=1723 DEFAULT CHARSET=utf8mb4;''',
 
 
 'DROP TABLE IF EXISTS `tweet`;',
@@ -98,7 +97,7 @@ DEFAULT CHARACTER SET = utf8;
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 AUTO_INCREMENT = 1660
-DEFAULT CHARACTER SET = utf8;''',
+DEFAULT CHARACTER SET = utf8mb4;''',
 
 
 '''DROP TABLE IF EXISTS `tweet_has_hashtag`;''',
@@ -111,7 +110,7 @@ DEFAULT CHARACTER SET = utf8;''',
   KEY `fk_tweet_has_hashtag_tweet1_idx` (`tweet_idTweet`),
   CONSTRAINT `fk_tweet_has_hashtag_hashtag1` FOREIGN KEY (`hashtag_idHashTag`) REFERENCES `hashtag` (`idHashTag`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_tweet_has_hashtag_tweet1` FOREIGN KEY (`tweet_idTweet`) REFERENCES `tweet` (`idTweet`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;''',
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;''',
 
 
 'DROP TABLE IF EXISTS `tweetcandidato`;',
@@ -126,7 +125,7 @@ DEFAULT CHARACTER SET = utf8;''',
   CONSTRAINT `fk_TweetCandidato_Candidato1` FOREIGN KEY (`Candidato_idCandidato`) REFERENCES `candidato` (`idCandidato`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_TweetCandidato_Sentimento1` FOREIGN KEY (`Sentimento_idSentimento`) REFERENCES `sentimento` (`idSentimento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_TweetCandidato_Tweet1` FOREIGN KEY (`Tweet_idTweet`) REFERENCES `tweet` (`idTweet`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;'''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;'''
 
 
 

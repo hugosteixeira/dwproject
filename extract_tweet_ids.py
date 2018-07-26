@@ -80,7 +80,6 @@ class HastagMining:
                 dao = Dao()
                 dao.insert('manager', ['hastag', 'idTweet', 'idCandidato', 'timeStamp'],[self._hastag, idTweet, self._candidato, tweetTimeStamp])
             
-            
             print('...')
             cont+=1
             if cont > pivo:

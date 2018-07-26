@@ -1,6 +1,8 @@
 import os
 import sys
 from traceback import print_tb, extract_tb, format_list
+import unicodedata
+import re
 
 def printError():
     error = sys.exc_info()
@@ -32,3 +34,13 @@ def tratarColumnsDao(lista):
         else:
             resultado = resultado + x + ","
     return resultado
+
+
+def limparTexto(palavra):
+
+    # Unicode normalize transforma um caracter em seu equivalente em latin.
+    nfkd = unicodedata.normalize('NFKD', palavra)
+    palavraSemAcento = u"".join([c for c in nfkd if not unicodedata.combining(c)])
+
+    # Usa expressão regular para retornar a palavra apenas com números, letras e espaço
+    return re.sub('[^a-zA-Z0-9 \\\]', '', palavraSemAcento)
