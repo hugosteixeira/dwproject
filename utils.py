@@ -17,7 +17,6 @@ def printError():
 
 def tratarValuesDao(lista):
     resultado = ''
-    print(lista)
     for x in range(len(lista)):
         if x == len(lista)-1:
             resultado = resultado + str(lista[x]) + ''
@@ -27,7 +26,6 @@ def tratarValuesDao(lista):
 
 def tratarColumnsDao(lista):
     resultado = ''
-    print(lista)
     for x in lista:
         if x == lista[-1]:
             resultado = resultado + x + ''

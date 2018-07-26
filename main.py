@@ -5,22 +5,21 @@ import time
 from tweet_from_id import TweetFromID
 from models import Tweet,User
 from sentiment_analyze import Linguakit
+from utils import printError
 
-fileOpen = open("Last_id.txt",'w')
-lastId = fileOpen.read()
 s1 = sys.argv[1]
 
-if s1 == 'newHastag':
-    
+if s1 == 'newHashtag':
+
     candidato, hastag =  sys.argv[2], sys.argv[3]
 
     dao = Dao()
     r = dao.insert('manager', ['hastag', 'idTweet', 'idCandidato', 'timeStamp'],[hastag, '0', candidato, 0])
-    
-    print(">>> new hastag saved for mining use 'main.py mineHastag {} {} {}'".format(candidato, hastag, 'p'))
 
-elif s1 == 'minehashtag':
-    
+    print(">>> new hastag saved for mining use 'main.py mineHashtag {} {} {}'".format(candidato, hastag, 'p'))
+
+elif s1 == 'mineHashtag':
+
     candidato, hastag =  sys.argv[2], sys.argv[3]
     p = False
     if sys.argv[4] == 'p':
@@ -29,19 +28,27 @@ elif s1 == 'minehashtag':
     mining.start()
 
 if s1 =='minetweet':
+    lastId = open('Last_id.txt','r')
     dao = Dao()
     linguaKit = Linguakit()
     tweetGetter = TweetFromID()
-    idList = dao.selectIds(lastId)
-    lastId = idList[-1]['idMining']
+    idList = dao.selectIds(str(lastId))
     for x in idList:
-        tweet = Tweet(tweetGetter.getTweet(x['idMining']))
-        tweet.candidato = x['idCandidato']
-        tweet.sentimento = linguaKit.sent_analyze(tweet.tweetText)
-        if tweet.sentimento < 0:
-            tweet.sentimento = 1
-        elif tweet.sentimento == 0:
-            tweet.sentimento = 2
-        else:
-            tweet.sentimento = 3
-        dao.insertTweet(tweet)
+        try:
+            tweet = Tweet(tweetGetter.getTweet(x['idMining']))
+            tweet.candidato = x['idCandidato']
+            tweet.sentimento = linguaKit.sent_analyze(tweet.tweetText)
+            if tweet.sentimento < 0:
+                tweet.sentimento = 1
+            elif tweet.sentimento == 0:
+                tweet.sentimento = 2
+            else:
+                tweet.sentimento = 3
+            dao.insertTweet(tweet)
+            lastId = x['idMining']
+        except:
+            printError()
+            break
+        fileOpen = open('Last_id.txt','w')
+        fileOpen.write(lastId)
+        fileOpen.close()

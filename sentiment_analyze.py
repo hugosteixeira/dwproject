@@ -6,7 +6,7 @@ class Linguakit:
     LANGUAGE_SCRIPT = "perl"
     PATH_SCRIPT_ANALYZE = "C:\\Users\\Aurinez\\Desktop\\Linguakit\\linguakit.perl"
 
-    def __init__(self, language_text = 'pt', output_mode = '-s', off_shell = True):
+    def __init__ (self, language_text = 'pt', output_mode = '-s', off_shell = True):
         self._language_text = language_text
         self._output_mode = output_mode
         self._off_shell = off_shell

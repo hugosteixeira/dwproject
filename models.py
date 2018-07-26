@@ -1,8 +1,9 @@
-from format_place import localizationAddress
+from format_place import FormatPlace
 class Tweet:
     def __init__ (self,status):
         self.id = status.id_str
-        self.user = User(status.user.screen_name,status.user.followers_count,status.user.statuses_count,status.user.statuses_count,localizationAddress(status.user.location))
+
+        self.user = User(status.user.screen_name,status.user.followers_count,status.user.statuses_count,FormatPlace(status.user.location).localizationAddress())
         self.hashtags = status.entities["hashtags"]
         self.tweetText = status.full_text
         self.tweetDate = status.created_at

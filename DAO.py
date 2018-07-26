@@ -14,7 +14,7 @@ class Dao:
             columns = tratarColumnsDao(columns)
             values = tratarValuesDao(values)
             valor="INSERT INTO {}({}) VALUES ('{}')".format(table,columns,values)
-            print(valor)
+            #print(valor)
             self.cursor.execute(valor)
             self.dbHelper.conn.commit()
             return self.cursor.lastrowid
@@ -25,7 +25,7 @@ class Dao:
         try:
             if whereArg != '':
                 selectWhere='SELECT {} FROM {} WHERE {};'.format(columns,table,whereArg)
-                print(selectWhere)
+                #print(selectWhere)
                 self.cursor.execute(selectWhere)
                 result = self.cursor.fetchall()
                 
