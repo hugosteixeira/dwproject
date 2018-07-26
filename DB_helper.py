@@ -9,7 +9,7 @@ class DB_helper :
   `idMining` int(11) NOT NULL AUTO_INCREMENT,
   `hastag` varchar(45) NOT NULL,
   `idTweet` varchar(45) NOT NULL,
-  `Candidato` varchar(45) NOT NULL,
+  `idCandidato` varchar(45) NOT NULL,
   `timeStamp` int(11) NOT NULL,
   PRIMARY KEY (`idMining`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;''',
@@ -133,9 +133,9 @@ DEFAULT CHARACTER SET = utf8;''',
 
 ]
     
-    Q_CREATE_DATABASE = "CREATE DATABASE dw"
-    Q_DROP_DATABASE = "DROP DATABASE dw"
-    DATA_BASE_NAME = "basemodel"
+    Q_CREATE_DATABASE = "CREATE DATABASE Database"
+    Q_DROP_DATABASE = "DROP DATABASE Database"
+    DATA_BASE_NAME = "Database"
     SQL_HOST = "localhost"
     SQL_USER = "root"
     SQL_PASSWD = ""
