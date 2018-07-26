@@ -98,4 +98,3 @@ class HastagMining:
     
 #mining = HastagMining('LulaLivre','Lula', print_status = True)
 #mining.start()
-

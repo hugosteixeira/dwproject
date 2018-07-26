@@ -4,7 +4,7 @@ import subprocess
 class Linguakit:
     
     LANGUAGE_SCRIPT = "perl"
-    PATH_SCRIPT_ANALYZE = "C:\Users\Aurinez\Desktop\Linguakit\\linguakit.perl"
+    PATH_SCRIPT_ANALYZE = "C:\\Users\\Aurinez\\Desktop\\Linguakit\\linguakit.perl"
 
     def __init__(self, language_text = 'pt', output_mode = '-s', off_shell = True):
         self._language_text = language_text
@@ -17,7 +17,7 @@ class Linguakit:
         rList =  result.decode().replace('\r','\t').split('\t')
         sent = rList[1]
         sent_value = rList[2]
-        return [text, sent, sent_value]
+        return [sent_value]
 
 
 

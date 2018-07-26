@@ -43,10 +43,12 @@ class Dao:
             userId = self.insertUser(tweet.user)
             hashtagsIds = self.insertHashtags(tweet.hashtags)
             table = 'Tweet'
-            columns = ['Texto','Data','Retweets','Likes','Usuario_idUsuario','idTweetOrigem','Lugar']
+            columns = ['Texto','Data','Retweets','Likes','Usuario_idUsuario','idTweetOrigem','Lugar_idLugar']
             values = [tweet.tweetText,tweet.tweetDate,tweet.retweetCount,tweet.likes,userId,tweet.id,tweet.user.location]
             selectWhere=self.select('*',table,"idTweetOrigem = '"+tweet.id+"'")
             if selectWhere == ():
+                lugarId = self.insertLocation(tweet.user.location)
+                values = [tweet.tweetText,tweet.tweetDate,tweet.retweetCount,tweet.likes,userId,tweet.id,lugarId]
                 tweetId = self.insert(table,columns,values)
                 for x in hashtagsIds:
                     self.insertTweetHashtag(tweetId,x)
@@ -115,12 +117,15 @@ class Dao:
                 result = 'error'
             return result
         except:
-            printError
+            printError()
 
-    def insertLocation(self,city,state,country):
+    def insertLocation(self,location):
         try:
             table = 'lugar'
             columns = ['Cidade','Estado','Pais']
+            city=location['city']
+            state= location['state']
+            country= location['country']
             values = [city,state,country]
             selectWhere = self.select('*',table,"Cidade = '"+city+"' AND Estado = '"+state+"'")
             if selectWhere == ():
@@ -131,4 +136,11 @@ class Dao:
         except:
             printError()
 
-
+    def selectIds(self,lastid):
+        try:
+            table = 'manager'
+            result = self.select('*',table,"idMining > '"+lastid+"' LIMIT 2000")
+            if result != ():
+                return result
+        except:
+            printError()
