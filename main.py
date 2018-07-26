@@ -28,27 +28,31 @@ elif s1 == 'mineHashtag':
     mining.start()
 
 if s1 =='minetweet':
-    lastId = open('Last_id.txt','r')
+    arq = open('Last_id.txt','r')
+    lastId = arq.read()
     dao = Dao()
     linguaKit = Linguakit()
     tweetGetter = TweetFromID()
-    idList = dao.selectIds(str(lastId))
+    idList = dao.selectIds(int(lastId))
     for x in idList:
-        try:
-            tweet = Tweet(tweetGetter.getTweet(x['idMining']))
-            tweet.candidato = x['idCandidato']
-            tweet.sentimento = linguaKit.sent_analyze(tweet.tweetText)
-            if tweet.sentimento < 0:
-                tweet.sentimento = 1
-            elif tweet.sentimento == 0:
-                tweet.sentimento = 2
-            else:
-                tweet.sentimento = 3
-            dao.insertTweet(tweet)
-            lastId = x['idMining']
-        except:
-            printError()
-            break
+        idTweet = x['idTweet']
+        if idTweet != '0':
+            print(x)
+            try:
+                tweet = Tweet(tweetGetter.getTweet( x['idTweet']), idTweet)
+                tweet.candidato = x['idCandidato']
+                tweet.sentimento = linguaKit.sent_analyze(tweet.tweetText)
+                if tweet.sentimento < 0:
+                    tweet.sentimento = 1
+                elif tweet.sentimento == 0:
+                    tweet.sentimento = 2
+                else:
+                    tweet.sentimento = 3
+                dao.insertTweet(tweet)
+                lastId = x['idMining']
+            except:
+                printError()
+                break
         fileOpen = open('Last_id.txt','w')
         fileOpen.write(lastId)
         fileOpen.close()

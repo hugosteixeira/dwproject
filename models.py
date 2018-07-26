@@ -1,7 +1,7 @@
 from format_place import FormatPlace
 class Tweet:
-    def __init__ (self,status):
-        self.id = status.id_str
+    def __init__ (self, status, id):
+        self.id = id
 
         self.user = User(status.user.screen_name,status.user.followers_count,status.user.statuses_count,FormatPlace(status.user.location).localizationAddress())
         self.hashtags = status.entities["hashtags"]

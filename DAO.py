@@ -137,9 +137,11 @@ class Dao:
             printError()
 
     def selectIds(self,lastid):
+        rangeId = lastid + 2000
         try:
             table = 'manager'
-            result = self.select('*',table,"idMining > '"+lastid+"' LIMIT 2000")
+            result = self.select('*',table,"idMining > "+str(lastid)+" and idMining <"+str(rangeId) ) 
+            #print(result)
             if result != ():
                 return result
         except:

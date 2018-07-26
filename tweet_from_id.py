@@ -7,5 +7,5 @@ class TweetFromID:
     api = tweepy.API(auth)
 
     def getTweet(self, id):
-        tweet = Tweet(self.api.get_status(id,tweet_mode='extended'))
+        tweet = Tweet(self.api.get_status(id,tweet_mode='extended'), id)
         return tweet
