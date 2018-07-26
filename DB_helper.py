@@ -16,13 +16,13 @@ class DB_helper :
 
 'DROP TABLE IF EXISTS `candidato`;',
 
-'''CREATE TABLE `candidato` (
+'''''CREATE TABLE `candidato` (
   `idCandidato` int(11) NOT NULL AUTO_INCREMENT,
   `Nome` varchar(45) NOT NULL,
   `Partido` varchar(45) NOT NULL,
   `Numero` int(11) NOT NULL,
   PRIMARY KEY (`idCandidato`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;''',
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;''',''
 
 
 'DROP TABLE IF EXISTS `hashtag`;',
@@ -37,12 +37,16 @@ class DB_helper :
 
 'DROP TABLE IF EXISTS `lugar`;',
 
-'''CREATE TABLE `lugar` (
-  `idLugar` int(11) NOT NULL AUTO_INCREMENT,
-  `Estado` varchar(45) NOT NULL,
-  `Pais` varchar(45) NOT NULL,
-  PRIMARY KEY (`idLugar`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;''',
+'''CREATE TABLE IF NOT EXISTS `mydb`.`lugar` (
+  `idLugar` INT(11) NOT NULL AUTO_INCREMENT,
+  `Cidade` VARCHAR(45) NOT NULL,
+  `Estado` VARCHAR(45) NOT NULL,
+  `Pais` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idLugar`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8;
+''',
 
 
 'DROP TABLE IF EXISTS `sentimento`;',
@@ -69,24 +73,32 @@ class DB_helper :
 
 'DROP TABLE IF EXISTS `tweet`;',
 
-'''CREATE TABLE `tweet` (
-  `idTweet` int(11) NOT NULL AUTO_INCREMENT,
-  `Texto` varchar(400) NOT NULL,
-  `Data` varchar(45) NOT NULL,
-  `TimeStamp` int(11) DEFAULT NULL,
-  `Replys` int(11) DEFAULT NULL,
-  `Retweets` int(11) NOT NULL,
-  `Likes` int(11) NOT NULL,
-  `Usuario_idUsuario` int(11) NOT NULL,
-  `Lugar_idLugar` int(11) DEFAULT NULL,
-  `idTweetOrigem` varchar(45) DEFAULT NULL,
-  `Lugar` varchar(45) DEFAULT NULL,
+'''CREATE TABLE IF NOT EXISTS `mydb`.`tweet` (
+  `idTweet` INT(11) NOT NULL AUTO_INCREMENT,
+  `Texto` VARCHAR(400) NOT NULL,
+  `Data` VARCHAR(45) NOT NULL,
+  `Replys` INT(11) NULL DEFAULT NULL,
+  `Retweets` INT(11) NOT NULL,
+  `Likes` INT(11) NOT NULL,
+  `Usuario_idUsuario` INT(11) NOT NULL,
+  `Lugar_idLugar` INT(11) NULL DEFAULT NULL,
+  `idTweetOrigem` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`idTweet`),
-  KEY `fk_Tweet_Usuario1_idx` (`Usuario_idUsuario`),
-  KEY `fk_Tweet_Lugar1_idx` (`Lugar_idLugar`),
-  CONSTRAINT `fk_Tweet_Lugar1` FOREIGN KEY (`Lugar_idLugar`) REFERENCES `lugar` (`idLugar`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Tweet_Usuario1` FOREIGN KEY (`Usuario_idUsuario`) REFERENCES `usuario` (`idUsuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1660 DEFAULT CHARSET=utf8;''',
+  INDEX `fk_Tweet_Usuario1_idx` (`Usuario_idUsuario` ASC),
+  INDEX `fk_Tweet_Lugar1_idx` (`Lugar_idLugar` ASC),
+  CONSTRAINT `fk_Tweet_Lugar1`
+    FOREIGN KEY (`Lugar_idLugar`)
+    REFERENCES `mydb`.`lugar` (`idLugar`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Tweet_Usuario1`
+    FOREIGN KEY (`Usuario_idUsuario`)
+    REFERENCES `mydb`.`usuario` (`idUsuario`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 1660
+DEFAULT CHARACTER SET = utf8;''',
 
 
 '''DROP TABLE IF EXISTS `tweet_has_hashtag`;''',
