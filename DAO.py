@@ -48,9 +48,7 @@ class Dao:
             selectWhere=self.select('*',table,"idTweetOrigem = '"+tweet.id+"'")
             if selectWhere == ():
                 lugarId = self.insertLocation(tweet.user.location)
-                if lugarId == None:
-                   lugarId = 2
-                values = [tweet.tweetText,tweet.tweetDate,tweet.retweetCount,tweet.likes,userId,tweet.id,2]
+                values = [tweet.tweetText,tweet.tweetDate,tweet.retweetCount,tweet.likes,userId,tweet.id,lugarId]
                 tweetId = self.insert(table,columns,values)
                 for x in hashtagsIds:
                     self.insertTweetHashtag(tweetId,x)

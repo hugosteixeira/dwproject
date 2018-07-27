@@ -42,7 +42,7 @@ class HastagMining:
         options = webdriver.ChromeOptions();
         options.add_argument('headless');
         #self._driver = webdriver.Chrome('C:\\Users\\joaov\\Desktop\\dwproject\\chromedriver.exe ', chrome_options = options)
-        self._driver = webdriver.Chrome('C:\\Users\\joaov\\Desktop\\dwproject\\chromedriver.exe ')
+        self._driver = webdriver.Chrome()
         while stamp_start < stamp_finish :
  
             url = "https://twitter.com/search?f=tweets&vertical=default&q=%23{}%20since%3A{}%20until%3A{}&l=pt&src=typd".format(self._hastag, stamp_start, stamp_start + self.STEPP_TIMESTAMP)
