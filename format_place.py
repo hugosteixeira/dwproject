@@ -12,13 +12,14 @@ class FormatPlace :
 
     def __init__(self,location):
         self.gmaps = googlemaps.Client(key='AIzaSyD8b3UyPssRS9CwgWuW-788UFaZYS1oi9Q')
+        if location == '':
+            location = ' '
         self.address_components=location
 
 
     def localizationAddress(self):
         print ("Minha localizacao e ", self.address_components)
         geocode_result = self.gmaps.geocode(self.address_components,language='pt-br')
-        print(geocode_result)
         result = {}
         result['city'] = 'Nao definido'
         result['state'] = 'Nao definido'
@@ -38,8 +39,7 @@ class FormatPlace :
 
 
 
-
-texto = limparTexto('av gal/ newton /cavalcanti')
+texto = limparTexto('')
 formatPlace = FormatPlace(texto)
 print(formatPlace.localizationAddress())
  
