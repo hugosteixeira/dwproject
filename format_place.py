@@ -18,34 +18,28 @@ class FormatPlace :
     def localizationAddress(self):
         print ("Minha localizacao e ", self.address_components)
         geocode_result = self.gmaps.geocode(self.address_components,language='pt-br')
-    
-        address_components = {}
-        print(geocode_result[0]['address_components'])
-        print(len(geocode_result[0]['address_components']))
-    
-        if len(geocode_result[0]['address_components'])>=3:
-            address_components['city']= geocode_result[0]['address_components'][-3]['long_name']
-            address_components['state']=geocode_result[0]['address_components'][-2]['long_name']
-            address_components['country']=geocode_result[0]['address_components'][-1]['long_name']
-        elif len(geocode_result[0]['address_components'])==2:
-            address_components['city']= ''
-            address_components['state']=geocode_result[0]['address_components'][0]['long_name']
-            address_components['country']=geocode_result[0]['address_components'][1]['long_name']
-        elif len(geocode_result[0]['address_components'])==1:
-            address_components['city']= ''
-            address_components['state']=''
-            address_components['country']=geocode_result[0]['address_components'][0]['long_name']
-        else:
-            address_components['city']= ''
-            address_components['state']=''
-            address_components['country']=''
-        print('teste',address_components)
-        return address_components
+        print(geocode_result)
+        result = {}
+        result['city'] = 'Nao definido'
+        result['state'] = 'Nao definido'
+        result['country'] = 'Nao definido'
+        if len(geocode_result) > 0:
+            geocode_result = geocode_result[0]['address_components']
+            for x in geocode_result:
+                if x['types'][0] == 'administrative_area_level_2':
+                    result['city'] = x['long_name']
+                elif x['types'][0] == 'administrative_area_level_1':
+                    result['state'] = x['long_name']
+                elif x['types'][0] == 'country':
+                    result['country'] = x['long_name']
+        return result
 
 
 
 
-texto = limparTexto('jabuataum, pe')
+
+
+texto = limparTexto('av gal/ newton /cavalcanti')
 formatPlace = FormatPlace(texto)
 print(formatPlace.localizationAddress())
  
