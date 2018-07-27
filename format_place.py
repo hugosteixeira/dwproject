@@ -6,6 +6,10 @@ from sqlalchemy import inspect
 import googlemaps
 from utils import printError,limparTexto
     
+#AIzaSyCotn92FQLnipKRx1Tr4PK34ws3XXo89ws
+#AIzaSyC1r8ltFnKQYnSt5yRV-3PvdC73N3W3qRs
+#AIzaSyDaL09Gi0yE7DU-aMpkwa0Dxoo_Mt9L7-s
+#AIzaSyAFx1S50JHA8CEygyc2eqgRv2OQ596nc38
 
 class FormatPlace :
 
