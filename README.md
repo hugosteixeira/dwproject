@@ -14,6 +14,7 @@ Funcionalidades do Sistema:
 ```
 • Python 3 - Usado em todo o projeto
 • Versão mais atual do perl
+• Google Chrome
 ```
 Perl - Usado no [Linguakit](https://github.com/citiususc/Linguakit) - Biblioteca de Analise de Sentimentos.
 
