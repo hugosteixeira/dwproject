@@ -20,7 +20,7 @@ class Linguakit:
         sent = rList[1]
         sent_value = rList[2]
         result = [float(sent_value),text,sent]
-        print(result)
+        print(sent)
         return result
 
 

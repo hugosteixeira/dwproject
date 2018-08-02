@@ -3,6 +3,8 @@ import pymysql.cursors
 from DB_helper import DB_helper
 from models import Tweet,User
 from tweet_from_id import TweetFromID
+from sentiment_analyze import Linguakit
+from format_place import FormatPlace
 
 class Dao:
     def __init__(self):
@@ -14,7 +16,6 @@ class Dao:
             columns = tratarColumnsDao(columns)
             values = tratarValuesDao(values)
             valor="INSERT INTO {}({}) VALUES ('{}')".format(table,columns,values)
-            print(valor)
             self.cursor.execute(valor)
             self.dbHelper.conn.commit()
             return self.cursor.lastrowid
@@ -25,7 +26,6 @@ class Dao:
         try:
             if whereArg != '':
                 selectWhere='SELECT {} FROM {} WHERE {};'.format(columns,table,whereArg)
-                print(selectWhere)
                 self.cursor.execute(selectWhere)
                 result = self.cursor.fetchall()
                 
@@ -41,7 +41,6 @@ class Dao:
     def insertTweet(self,tweet):    
         try:
             userId = self.insertUser(tweet.user)
-            print(userId,'teste')
             hashtagsIds = self.insertHashtags(tweet.hashtags)
             table = 'Tweet'
             columns = ['Texto','Data','Retweets','Likes','Usuario_idUsuario','idTweetOrigem','Lugar_idLugar']
@@ -65,7 +64,6 @@ class Dao:
             columns = ['Nome','Followers','TotalTweets']
             values = [user.userName,user.usersFollowers,user.usersTweets]
             selectWhere=self.select('*',table,"Nome= '"+user.userName+"'")
-            print(selectWhere)
             if selectWhere == ():
                 userId = self.insert(table,columns,values)
             else:
@@ -86,7 +84,6 @@ class Dao:
                     hashtagIds.append(self.insert(table,[columns],values))
                 else:
                     hashtagId = selectWhere[0]['idHashTag']
-                    print('teste hashtag',hashtagId)
                     hashtagIds.append(hashtagId)
                
             return hashtagIds
@@ -128,7 +125,6 @@ class Dao:
             city=location['city']
             state= location['state']
             country= location['country']
-            print(city)
             values = [city,state,country]
             selectWhere = self.select('*',table,"Cidade = '"+city+"' AND Estado = '"+state+"'")
             if selectWhere == ():
@@ -145,8 +141,47 @@ class Dao:
         try:
             table = 'manager'
             result = self.select('*',table,"idMining > "+str(lastid)+" and idMining <"+str(rangeId) ) 
-            #print(result)
             if result != ():
                 return result
+        except:
+            printError()
+
+    def updateSentimento(self):
+        try:
+            table = 'tweetcandidato'
+            select=self.select('*',table,"Sentimento_idSentimento = 3")
+            table = 'tweet'
+            linguaKit = Linguakit()
+            for x in select:
+                select2 = self.select('*',table, "idTweet = {}".format(x['Tweet_idTweet']))
+                sentimento = linguaKit.sent_analyze(select2[0]['Texto'])[2]
+                if sentimento == 'NEGATIVE':
+                    sentimento = 1
+                elif sentimento == 'NONE':
+                    sentimento = 2
+                else:
+                    sentimento = 3
+                print(x['Tweet_idTweet'])
+                query = "UPDATE tweetcandidato SET Sentimento_idSentimento = {} WHERE Tweet_idTweet = {}".format(sentimento,x['Tweet_idTweet'])
+                print(query)
+                self.cursor.execute(query)
+                self.dbHelper.conn.commit()
+        except:
+            printError()
+
+    def updateLugar(self):
+        try:
+            table = 'lugar'
+            select = self.select('*',table)
+            formatPlace = FormatPlace()
+            print(len(select))
+            for x in range(len(select)):
+                endereco = "{} {} {}".format(select[x]['Cidade'],select[x]['Estado'],select[x]['Pais'])
+                print(endereco)
+                endereco = formatPlace.localizationCoord(endereco)
+                query = "UPDATE lugar SET lat = {} , lng = {} WHERE idLugar = {}".format(endereco['lat'],endereco['lng'],select[x]['idLugar'])
+                print(query)
+                self.cursor.execute(query)
+                self.dbHelper.conn.commit()
         except:
             printError()

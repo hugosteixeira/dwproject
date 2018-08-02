@@ -27,7 +27,7 @@ elif s1 == 'mineHashtag':
     mining = HastagMining(hastag, candidato, print_status = p)
     mining.start()
 
-if s1 =='minetweet':
+if s1 =='mineTweet':
     arq = open('Last_id.txt','r')
     lastId = arq.read()
     dao = Dao()
@@ -37,21 +37,20 @@ if s1 =='minetweet':
     for x in idList:
         idTweet = x['idTweet']
         if idTweet != '0':
-            #print(x)
             try:
                 tweet = tweetGetter.getTweet(idTweet)
-                tweet.tweetText = limparTexto(tweet.tweetText)
-                tweet.candidato = x['idCandidato']
-                tweet.sentimento = linguaKit.sent_analyze(tweet.tweetText)[2]
-                print(tweet.sentimento,'OLHA AQUI EU TOU AQUI')
-                if tweet.sentimento < 'NEGATIVE':
-                    tweet.sentimento = 1
-                elif tweet.sentimento == 'NONE':
-                    tweet.sentimento = 2
-                else:
-                    tweet.sentimento = 3
-                dao.insertTweet(tweet)
-                lastId = x['idMining']
+                if tweet != '':
+                    tweet.tweetText = limparTexto(tweet.tweetText)
+                    tweet.candidato = x['idCandidato']
+                    tweet.sentimento = linguaKit.sent_analyze(tweet.tweetText)[2]
+                    if tweet.sentimento == 'NEGATIVE':
+                        tweet.sentimento = 1
+                    elif tweet.sentimento == 'NONE':
+                        tweet.sentimento = 2
+                    else:
+                        tweet.sentimento = 3
+                    dao.insertTweet(tweet)
+                    lastId = x['idMining']
             except:
                 printError()
                 break

@@ -3,11 +3,9 @@ import json
 class Tweet:
     def __init__ (self, status, id):
         self.id = id
-        jsonDic = json.dumps(status._json)
         self.user = User(status.user.screen_name,status.user.followers_count,status.user.statuses_count,FormatPlace(status.user.location).localizationAddress())
         self.hashtags = status.entities["hashtags"]
         self.tweetText = status.full_text
-        #print(self.tweetText)
         self.tweetDate = status.created_at
         self.retweetCount = status.retweet_count
         self.likes = status.favorite_count

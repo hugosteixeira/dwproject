@@ -1,5 +1,6 @@
 import tweepy
 from models import Tweet
+from utils import printError
 
 class TweetFromID:
     auth = tweepy.OAuthHandler('jkwDvQkT5Es6S24JiLq2FLxrb', 'ju5ogpsqo3cQLxtgTurMgq7cmWt8CN2H9lQ0F5wGGrmegcvAMp')
@@ -7,5 +8,10 @@ class TweetFromID:
     api = tweepy.API(auth)
 
     def getTweet(self, id):
-        tweet = Tweet(self.api.get_status(id,tweet_mode='extended'), id)
+        tweet = ''
+        try:
+            tweet =self.api.get_status(id,tweet_mode='extended')        
+            tweet = Tweet(tweet,id)
+        except:
+            printError()
         return tweet
