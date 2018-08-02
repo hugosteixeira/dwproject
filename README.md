@@ -51,6 +51,7 @@ python main.py mineHashtag <id do candidato no banco de dados> <hashtag> p
 ```
 
 ### Minerando e analisando os tweets
+Minerará 2000 tweets se baseando pela tabela manager, onde o id inicial é o conteudo do arquivo Last_id.txt
 ```
 python main.py mineTweet
 ```
