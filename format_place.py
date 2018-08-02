@@ -6,17 +6,11 @@ from sqlalchemy import inspect
 import googlemaps
 from utils import limparTexto
     
-#AIzaSyCotn92FQLnipKRx1Tr4PK34ws3XXo89ws
-#AIzaSyC1r8ltFnKQYnSt5yRV-3PvdC73N3W3qRs
-#AIzaSyDaL09Gi0yE7DU-aMpkwa0Dxoo_Mt9L7-s
-#AIzaSyAFx1S50JHA8CEygyc2eqgRv2OQ596nc38
-#AIzaSyD8b3UyPssRS9CwgWuW-788UFaZYS1oi9Q
-
 class FormatPlace :
 
 
     def __init__(self,location=''):
-        self.gmaps = googlemaps.Client(key='AIzaSyC1r8ltFnKQYnSt5yRV-3PvdC73N3W3qRs')
+        self.gmaps = googlemaps.Client(key='GOOGLE API KEY AQUI')
         if location == '':
             location = ' '
         self.address_components=location

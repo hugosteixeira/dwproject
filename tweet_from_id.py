@@ -3,8 +3,8 @@ from models import Tweet
 from utils import printError
 
 class TweetFromID:
-    auth = tweepy.OAuthHandler('jkwDvQkT5Es6S24JiLq2FLxrb', 'ju5ogpsqo3cQLxtgTurMgq7cmWt8CN2H9lQ0F5wGGrmegcvAMp')
-    auth.set_access_token('89299395-PpehItyb3bnxSI3TEbve9Y8uDZKKOgaYiQinCCrvg', 'Rh8FHQk0Vd66LCZJIf20DrFzFZfmBZqqPLaAN3hXCmT3n')
+    auth = tweepy.OAuthHandler('Consumer Key (API Key)', 'Consumer Secret (API Secret)')
+    auth.set_access_token('Access Token', 'Access Token Secret')
     api = tweepy.API(auth)
 
     def getTweet(self, id):
