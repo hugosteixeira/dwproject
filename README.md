@@ -10,19 +10,19 @@ Funcionalidades do Sistema:
 • Usar um Datawarehouse para obter informações sobre os dados coletados.
 ```
 
-#Requerimentos:
-```
-• Python 3 - Usado em todo o projeto
-• Versão mais atual do perl - Usado no [Linguakit] (https://github.com/citiususc/Linguakit) - Biblioteca de Analise de Sentimentos.
-```
+##Requerimentos:
 
-#Instalação
-##Clone do repositório usando
+• Python 3 - Usado em todo o projeto
+• Versão mais atual do perl - Usado no *[Linguakit](https://github.com/citiususc/Linguakit) - Biblioteca de Analise de Sentimentos.
+
+
+##Instalação
+###Clone do repositório usando
 ```
 git clone https://github.com/hugosteixeira/dwproject.git
 ```
 
-##Instale os requerimentos usando
+###Instale os requerimentos usando
 ```
 pip install -r requirements.txt
 ```
