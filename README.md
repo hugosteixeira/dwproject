@@ -13,7 +13,7 @@ Funcionalidades do Sistema:
 #Requerimentos:
 ```
 • Python 3 - Usado em todo o projeto
-• Versão mais atual do perl - Usado no *[Linguakit](https://github.com/citiususc/Linguakit) - Biblioteca de Analise de Sentimentos.
+• Versão mais atual do perl - Usado no [Linguakit] (https://github.com/citiususc/Linguakit) - Biblioteca de Analise de Sentimentos.
 ```
 
 #Instalação
