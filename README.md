@@ -28,3 +28,20 @@ git clone https://github.com/hugosteixeira/dwproject.git
 ```
 pip install -r requirements.txt
 ```
+
+## Usando
+
+### Minerando os Ids dos tweets
+```
+python main.py newHashtag <id do candidato no banco de dados> <hashtag>
+python main.py mineHashtag <id do candidato no banco de dados> <hashtag> p
+```
+
+### Minerando e analisando os tweets
+```
+python main.py mineTweet
+```
+
+#### Limitação
+Trabalhar com tweets tem os seus problemas, a maior parte das localizações fornecidas pelos usuários são invalidas ou dificeis de se trabalhar.
+Estamos usando a api de geocoding do google para tratar esses lugares e transformar em localizaçoes válidas. Daí temos a maior limitação, o goole limita o uso de sua api de geocoding a 2500 usos diários em modo grátis.
