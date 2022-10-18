@@ -37,7 +37,7 @@ Pillow==9.0.1
 pycountry==18.5.26
 pycparser==2.18
 pylint==1.7.1
-PyMySQL==0.7.11
+PyMySQL==1.0.2
 PySocks==1.6.8
 python-dateutil==2.6.0
 pytz==2017.2
